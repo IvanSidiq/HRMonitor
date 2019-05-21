@@ -7,64 +7,79 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <SurfaceView
-        android:id="@+id/id_preview"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"/>
+  <SurfaceView
+      android:id="@+id/id_preview"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_marginLeft="50dp"
+      android:layout_marginRight="50dp"/>
 
-    <LinearLayout
-        android:id="@+id/id_linearLayout_graph"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="vertical"></LinearLayout>
+  <LinearLayout
+      android:id="@+id/id_linearLayout_graph"
+      android:layout_width="match_parent"
+      android:layout_height="70dp"
+      android:orientation="vertical"></LinearLayout>
 
-    <include
-        android:id="@+id/id_tmt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        layout="@layout/tmt"></include>
+  <include
+      android:id="@+id/id_tmt"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:visibility="invisible"
+      layout="@layout/tmt"></include>
 
-    <include
-        android:id="@+id/id_tmt2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        layout="@layout/tmt"
-        android:visibility="gone"></include>
+  <include
+      android:id="@+id/id_tmt2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      layout="@layout/tmt"
+      android:visibility="gone"></include>
 
-    <TextView
-        android:id="@+id/id_tv_heart_rate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:text="@string/app_name" >
-    </TextView>
+  <Button
+      android:id="@+id/mulai"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Mulai" />
 
-    <TextView
-        android:id="@+id/id_tv_heart_rate20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:text="@string/app_name" >
-    </TextView>
+  <TextView
+      android:id="@+id/id_tv_heart_rate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="50dp"
+      android:text="@string/app_name" >
+  </TextView>
 
-    <TextView
-        android:id="@+id/id_tv_Avg_Pixel_Values"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:text="@string/app_name" >
-    </TextView>
+  <TextView
+      android:id="@+id/id_tv_heart_rate20"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="50dp"
+      android:text="@string/app_name" >
+  </TextView>
 
-    <TextView
-        android:id="@+id/id_tv_pulse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:text="@string/app_name" >
-    </TextView>
+  <TextView
+      android:id="@+id/id_tv_Avg_Pixel_Values"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="50dp"
+      android:text="@string/app_name" >
+  </TextView>
+
+  <TextView
+      android:id="@+id/id_tv_pulse"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="50dp"
+      android:text="@string/app_name" >
+  </TextView>
+
+  <TextView
+      android:id="@+id/id_tv_pulsetime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="50dp"
+      android:text="@string/app_name" >
+  </TextView>
 
 </LinearLayout>

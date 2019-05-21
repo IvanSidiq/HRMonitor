@@ -44,6 +44,9 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,18 +56,26 @@ import com.heartrate.hrmonitor.ImageProcessing;
 public class MainActivity extends Activity {
     //曲线
     private Timer timer = new Timer();
+
+    private Timer timer2 = new Timer();
     //Timer任务，与Timer配套使用
     private TimerTask task;
+    private TimerTask task2;
     private static int gx;
     private static int j;
 
     private static double flag = 1;
     private Handler handler;
+    private Handler handler2;
     private String title = "pulse";
     private XYSeries series;
+    private XYSeries series2;
     private XYMultipleSeriesDataset mDataset;
+    private XYMultipleSeriesDataset mDataset2;
     private GraphicalView chart;
+    private GraphicalView chart2;
     private XYMultipleSeriesRenderer renderer;
+    private XYMultipleSeriesRenderer renderer2;
     private Context context;
     private int addX = -1;
     double addY;
@@ -156,23 +167,45 @@ public class MainActivity extends Activity {
     private void initConfig() {
         context = getApplicationContext();
 
+        Button mulai = (Button) findViewById(R.id.mulai);
+        mulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTime = System.currentTimeMillis();
+                beats = 0;
+                list.clear();
+                ConstraintLayout tmt = (ConstraintLayout)findViewById(R.id.id_tmt);
+                tmt.setVisibility(View.VISIBLE);
+                mTV_Heart_Rate.setVisibility(View.VISIBLE);
+            }
+        });
+
+        tMT();
         LinearLayout layout = (LinearLayout)findViewById(R.id.id_linearLayout_graph);
+        //LinearLayout layout2 = (LinearLayout)findViewById(R.id.id_linearLayout_graph2);
 
         series = new XYSeries(title);
+//        series2 = new XYSeries(title);
 
         mDataset = new XYMultipleSeriesDataset();
+  //      mDataset2 = new XYMultipleSeriesDataset();
 
         mDataset.addSeries(series);
+    //    mDataset2.addSeries(series2);
 
         int color = Color.GREEN;
         PointStyle style = PointStyle.CIRCLE;
         renderer = buildRenderer(color, style, true);
+      //  renderer2 = buildRenderer(color, style, true);
 
         setChartSettings(renderer, "X", "Y", 0, 1000, 4,16, Color.WHITE, Color.WHITE);
+        //setChartSettings2(renderer2, "X", "Y", 0, 1000, -1,1, Color.WHITE, Color.WHITE);
 
         chart = ChartFactory.getLineChartView(context, mDataset, renderer);
+        //chart2 = ChartFactory.getLineChartView(context, mDataset2, renderer2);
 
         layout.addView(chart, new WindowManager.LayoutParams(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT));
+        //layout2.addView(chart2, new WindowManager.LayoutParams(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT));
 
         handler = new Handler() {
             @Override
@@ -181,7 +214,6 @@ public class MainActivity extends Activity {
                 super.handleMessage(msg);
             }
         };
-
         task = new TimerTask() {
             @Override
             public void run() {
@@ -192,6 +224,25 @@ public class MainActivity extends Activity {
         };
 
         timer.schedule(task, 1,8);
+
+        /*handler2 = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                updateChart2();
+                super.handleMessage(msg);
+            }
+        };
+        task2 = new TimerTask() {
+            @Override
+            public void run() {
+                Message message2 = new Message();
+                message2.what = 1;
+                handler.sendMessage(message2);
+            }
+        };
+
+        timer2.schedule(task2, 1,8);
+*/
         preview = (SurfaceView) findViewById(R.id.id_preview);
         previewL = (ConstraintLayout) findViewById(R.id.id_tmt);
         previewHolder = preview.getHolder();
@@ -201,12 +252,12 @@ public class MainActivity extends Activity {
         mTV_Heart_Rate = (TextView) findViewById(R.id.id_tv_heart_rate);
         mTV_Avg_Pixel_Values = (TextView) findViewById(R.id.id_tv_Avg_Pixel_Values);
         mTV_pulse = (TextView) findViewById(R.id.id_tv_pulse);
+        mtvampuh = (TextView) findViewById(R.id.id_tv_pulsetime);
         mTV_Heart_Rate20 = (TextView) findViewById(R.id.id_tv_heart_rate20);
 
+        mTV_Heart_Rate.setVisibility(View.GONE);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,  "My Tag");
-
-        tMT();
     }
 
     //	曲线
@@ -275,6 +326,30 @@ public class MainActivity extends Activity {
         renderer.setShowLegend(false);
     }
 
+    protected void setChartSettings2(XYMultipleSeriesRenderer renderer2, String xTitle, String yTitle,
+                                    double xMin, double xMax, double yMin, double yMax, int axesColor, int labelsColor) {
+        //Untuk render bagan, lihat dokumentasi api.
+        renderer2.setChartTitle(title);
+        renderer2.setXTitle(xTitle);
+        renderer2.setYTitle(yTitle);
+        renderer2.setXAxisMin(xMin);
+        renderer2.setXAxisMax(xMax);
+        renderer2.setYAxisMin(yMin);
+        renderer2.setYAxisMax(yMax);
+        renderer2.setAxesColor(axesColor);
+        renderer2.setLabelsColor(labelsColor);
+        renderer2.setShowGrid(true);
+        renderer2.setGridColor(Color.GREEN);
+        renderer2.setXLabels(20);
+        renderer2.setYLabels(10);
+        renderer2.setXTitle("Time");
+        renderer2.setYTitle("Benar >< Salah");
+        renderer2.setYLabelsAlign(Paint.Align.RIGHT);
+        renderer2.setPointSize((float) 3 );
+        renderer2.setShowLegend(false);
+    }
+
+
     /**
      * Perbarui informasi ikon
      */
@@ -341,7 +416,6 @@ public class MainActivity extends Activity {
         chart.invalidate();
     } //曲线
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -365,6 +439,7 @@ public class MainActivity extends Activity {
         //camera = null;
     }
 
+    private static List<String> list = new ArrayList<String>();
     private static android.hardware.Camera.PreviewCallback previewCallback = new PreviewCallback() {
         public void onPreviewFrame(byte[] data, Camera cam) {
             if (data == null) {
@@ -402,16 +477,21 @@ public class MainActivity extends Activity {
             //Hitung rata-rata
             int rollingAverage = (averageArrayCnt > 0)?(averageArrayAvg/averageArrayCnt):0;
             TYPE newType = currentType;
+            long endTime = System.currentTimeMillis();
+            double totalTimeInSecs = (endTime - startTime) / 1000d;
             if (imgAvg < rollingAverage) {
                 newType = TYPE.RED;
                 if (newType != currentType) {
                     beats++;
-                    flag=0;
-                    mTV_pulse.setText("The number of pulses is" + String.valueOf(beats));
+                    flag = 0;
+                    mTV_pulse.setText("The number of pulses is " + String.valueOf(beats));
+                    list.add(String.valueOf(totalTimeInSecs));
+
                 }
             } else if (imgAvg > rollingAverage) {
                 newType = TYPE.GREEN;
             }
+
 
             if(averageIndex == averageArraySize) {
                 averageIndex = 0;
@@ -424,8 +504,7 @@ public class MainActivity extends Activity {
             }
 
             //Dapatkan waktu akhir sistem (ms)
-            long endTime = System.currentTimeMillis();
-            double totalTimeInSecs = (endTime - startTime) / 1000d;
+
             if(totalTimeInSecs >=1){
                 mTV_Heart_Rate.setText("Timers "+String.valueOf(totalTimeInSecs));
             }
@@ -433,8 +512,7 @@ public class MainActivity extends Activity {
                 double bps = (beats / totalTimeInSecs);
                 int dpm = (int) (bps * 60d);
                 if (dpm < 30 || dpm > 180|| imgAvg < 200) {
-                    startTime = System.currentTimeMillis();
-                    beats = 0;
+                    //startTime = System.currentTimeMillis();
                     processing.set(false);
                     return;
                 }
@@ -461,8 +539,10 @@ public class MainActivity extends Activity {
                         "    " + String.valueOf(beatsArrayCnt));*/
                 if(beatsIndex == beatsArray.length){ HR20 = beatsAvg;}
                 mTV_Heart_Rate20.setText("Your Heart Rate is "+String.valueOf(HR20));
-                startTime = System.currentTimeMillis();
                 beats = 0;
+                mtvampuh.setText("Time pulses " + (list));
+                mTV_Heart_Rate.setVisibility(View.GONE);
+                startTime = 0;
             }
             processing.set(false);
         }
