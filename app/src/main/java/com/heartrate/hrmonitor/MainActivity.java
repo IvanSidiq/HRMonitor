@@ -174,7 +174,7 @@ public class MainActivity extends Activity {
                 startTime = System.currentTimeMillis();
                 beats = 0;
                 list.clear();
-                ConstraintLayout tmt = (ConstraintLayout)findViewById(R.id.id_tmt);
+                ConstraintLayout tmt = (ConstraintLayout)findViewById(R.id.id_tmt1);
                 tmt.setVisibility(View.VISIBLE);
                 mTV_Heart_Rate.setVisibility(View.VISIBLE);
             }
@@ -244,7 +244,7 @@ public class MainActivity extends Activity {
         timer2.schedule(task2, 1,8);
 */
         preview = (SurfaceView) findViewById(R.id.id_preview);
-        previewL = (ConstraintLayout) findViewById(R.id.id_tmt);
+        previewL = (ConstraintLayout) findViewById(R.id.id_tmt1);
         previewHolder = preview.getHolder();
         previewHolder.addCallback(surfaceCallback);
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -666,6 +666,12 @@ public class MainActivity extends Activity {
 
         Button next =(Button) findViewById(R.id.next);
         next.setVisibility(View.GONE);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         Button a =(Button) findViewById(R.id.a);
         a.setOnClickListener(new View.OnClickListener() {

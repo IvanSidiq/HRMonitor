@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HRmonitor</string>
+    <string name="tmt_explain">Urutkan dari angka terkecil ke terbesar..!!</string>
+    <string name="tmt_explain2">Urutkan 1 -> A -> 2 -> B dan seterusnya..!!</string>
 </resources>
