@@ -21,8 +21,11 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -33,6 +36,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.FragmentActivity;
 
 
 import org.achartengine.ChartFactory;
@@ -53,7 +57,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.heartrate.hrmonitor.ImageProcessing;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     //曲线
     private Timer timer = new Timer();
 
@@ -157,6 +161,8 @@ public class MainActivity extends Activity {
                 }
             }
         }
+
+
         initConfig();
     }
 
@@ -164,7 +170,7 @@ public class MainActivity extends Activity {
      * 初始化配置
      */
     @SuppressWarnings("deprecation")
-    private void initConfig() {
+    private void initConfig(){
         context = getApplicationContext();
 
         Button mulai = (Button) findViewById(R.id.mulai);
@@ -174,7 +180,10 @@ public class MainActivity extends Activity {
                 startTime = System.currentTimeMillis();
                 beats = 0;
                 list.clear();
-                ConstraintLayout tmt = (ConstraintLayout)findViewById(R.id.id_tmt1);
+
+                //getSupportFragmentManager().beginTransaction()
+                //.add(R.id.id_tmt1), firstFragment).commit();
+                LinearLayout tmt = (LinearLayout) findViewById(R.id.id_tmt1);
                 tmt.setVisibility(View.VISIBLE);
                 mTV_Heart_Rate.setVisibility(View.VISIBLE);
             }
@@ -651,7 +660,7 @@ public class MainActivity extends Activity {
         alertDialog.show();
     }
 
-    private boolean boolA = false;
+    /*private boolean boolA = false;
     private boolean boolB = false;
     private boolean boolC = false;
     private boolean boolD = false;
@@ -666,12 +675,6 @@ public class MainActivity extends Activity {
 
         Button next =(Button) findViewById(R.id.next);
         next.setVisibility(View.GONE);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         Button a =(Button) findViewById(R.id.a);
         a.setOnClickListener(new View.OnClickListener() {
@@ -808,5 +811,5 @@ public class MainActivity extends Activity {
                 
             }
         });
-    }
+    }*/
 }

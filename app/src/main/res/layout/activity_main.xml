@@ -18,47 +18,18 @@
       android:id="@+id/id_linearLayout_graph"
       android:layout_width="match_parent"
       android:layout_height="70dp"
-      android:orientation="vertical"></LinearLayout>
+      android:orientation="vertical">
+  </LinearLayout>
 
-  <include
-      android:id="@+id/id_tmt_old"
+  <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:visibility="gone"
-      layout="@layout/tmt"></include>
+      android:layout_height="match_parent"
+      android:id="@+id/id_tmt_layout"
+      android:orientation="horizontal"
+      android:layout_weight="1">
+  </LinearLayout>
 
-  <include
-      android:id="@+id/id_tmt1"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      layout="@layout/tmt_easy"
-      android:visibility="invisible"></include>
 
-  <include
-      android:id="@+id/id_tmt2"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      layout="@layout/tmt_medium"
-      android:visibility="invisible"></include>
-
-  <include
-      android:id="@+id/id_tmt3"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      layout="@layout/tmt_hard"
-      android:visibility="gone"></include>
-
-  <include
-      android:id="@+id/id_tmt25"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      layout="@layout/tmt_25"
-      android:visibility="gone"></include>
 
   <Button
       android:id="@+id/mulai"
