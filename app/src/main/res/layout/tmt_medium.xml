@@ -1,123 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".TMT_Medium">
+    <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <Button
+                android:id="@+id/a_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="1"
+                app:layout_constraintEnd_toStartOf="@+id/d_medium"
+                android:layout_marginTop="3dp" app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
-    <Button
-        android:id="@+id/a"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="98dp"
-        android:layout_marginEnd="21dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="1"
-        app:layout_constraintEnd_toStartOf="@+id/d"
-        app:layout_constraintTop_toBottomOf="@+id/b" />
+        <Button
+                android:id="@+id/b_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="88dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="3dp" app:layout_constraintTop_toBottomOf="@+id/a_medium"/>
 
-    <Button
-        android:id="@+id/b"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="153dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <Button
+                android:id="@+id/c_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp" android:layout_marginTop="77dp"
+                app:layout_constraintTop_toBottomOf="@+id/next_medium"/>
 
-    <Button
-        android:id="@+id/c"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="91dp"
-        android:layout_marginEnd="38dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/next" />
+        <Button
+                android:id="@+id/d_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="4"
+                app:layout_constraintEnd_toStartOf="@+id/c_medium"
+                android:layout_marginTop="55dp" app:layout_constraintTop_toBottomOf="@+id/b_medium"/>
 
-    <Button
-        android:id="@+id/d"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="179dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="4"
-        app:layout_constraintEnd_toStartOf="@+id/c"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+                android:id="@+id/e_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/d_medium"/>
 
-    <Button
-        android:id="@+id/e"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="49dp"
-        android:layout_marginEnd="70dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/d" />
+        <Button
+                android:id="@+id/f_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="6"
+                app:layout_constraintEnd_toStartOf="@+id/d_medium"
+                android:layout_marginEnd="205dp" android:layout_marginTop="56dp"
+                app:layout_constraintTop_toBottomOf="@+id/g_medium"/>
 
-    <Button
-        android:id="@+id/f"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="43dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="6"
-        app:layout_constraintEnd_toStartOf="@+id/a"
-        app:layout_constraintTop_toBottomOf="@+id/h" />
+        <Button
+                android:id="@+id/g_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="52dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="7"
+                app:layout_constraintEnd_toStartOf="@+id/h_medium"
+                android:layout_marginTop="98dp" app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
-    <Button
-        android:id="@+id/g"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="98dp"
-        android:layout_marginEnd="49dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="7"
-        app:layout_constraintEnd_toStartOf="@+id/h"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <Button
+                android:id="@+id/h_medium"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="132dp"
+                android:background="@drawable/oval_button"
+                android:contentDescription="It's a button, ha za"
+                android:text="8"
+                app:layout_constraintEnd_toStartOf="@+id/c_medium"
+                android:layout_marginTop="100dp" app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
-    <Button
-        android:id="@+id/h"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="98dp"
-        android:layout_marginEnd="158dp"
-        android:background="@drawable/oval_button"
-        android:contentDescription="It's a button, ha za"
-        android:text="8"
-        app:layout_constraintEnd_toStartOf="@+id/c"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <Button
+                android:id="@+id/next_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+        />
 
-    <Button
-        android:id="@+id/next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tmt_explain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tmt_explain"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

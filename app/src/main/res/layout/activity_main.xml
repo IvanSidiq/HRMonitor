@@ -5,31 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/linearlayout">
 
   <SurfaceView
-      android:id="@+id/id_preview"
-      android:layout_width="match_parent"
-      android:layout_height="50dp"
-      android:layout_marginLeft="50dp"
-      android:layout_marginRight="50dp"/>
+          android:id="@+id/id_preview"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginLeft="50dp"
+          android:layout_marginRight="50dp"/>
 
   <LinearLayout
-      android:id="@+id/id_linearLayout_graph"
-      android:layout_width="match_parent"
-      android:layout_height="70dp"
-      android:orientation="vertical">
+          android:id="@+id/id_linearLayout_graph"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:orientation="vertical">
   </LinearLayout>
 
   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:id="@+id/id_tmt_layout"
-      android:orientation="horizontal"
-      android:layout_weight="1">
-  </LinearLayout>
-
-
+          android:orientation="horizontal"
+          android:id="@+id/fragment_tmt"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"/>
 
   <Button
       android:id="@+id/mulai"
@@ -37,6 +35,13 @@
       android:layout_height="wrap_content"
       android:text="Mulai" />
 
+  <Button
+        android:id="@+id/finish"
+        android:text="Selesai"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
   <TextView
       android:id="@+id/id_tv_heart_rate"
       android:layout_width="wrap_content"
@@ -68,13 +73,4 @@
       android:layout_marginLeft="50dp"
       android:text="@string/app_name" >
   </TextView>
-
-  <TextView
-      android:id="@+id/id_tv_pulsetime"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="50dp"
-      android:text="@string/app_name" >
-  </TextView>
-
 </LinearLayout>

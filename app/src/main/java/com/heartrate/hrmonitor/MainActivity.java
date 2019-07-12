@@ -15,14 +15,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
+import android.os.*;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.*;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,9 +32,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.app.FragmentActivity;
 
 
+import com.heartrate.hrmonitor.model.HeartRate;
+import com.heartrate.hrmonitor.repository.LocalStorage;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -47,15 +44,27 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.sql.DriverManager;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.heartrate.hrmonitor.ImageProcessing;
+import kotlin.Metadata;
+//import kotlin.jvm.internal.DefaultConstructorMarker;
+import kotlin.jvm.internal.Intrinsics;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+@Metadata(
+        mv = {1, 1, 15},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {"\u0000P\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\n\n\u0002\u0010!\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\t\n\u0000\n\u0002\u0010\b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\u0018\u0000 %2\u00020\u0001:\u0001%B\u0005¢\u0006\u0002\u0010\u0002J\u000e\u0010\u0015\u001a\u00020\u00162\u0006\u0010\u0017\u001a\u00020\u0018J\u0016\u0010\u0019\u001a\u00020\u00162\u0006\u0010\u001a\u001a\u00020\u001b2\u0006\u0010\u001c\u001a\u00020\u001dJ&\u0010\u001e\u001a\u0004\u0018\u00010\u00182\u0006\u0010\u001f\u001a\u00020 2\b\u0010!\u001a\u0004\u0018\u00010\"2\b\u0010#\u001a\u0004\u0018\u00010$H\u0016R\u000e\u0010\u0003\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u0005\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u0007\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\t\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\n\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\u000b\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\f\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R\u000e\u0010\r\u001a\u00020\u0004X\u0082\u000e¢\u0006\u0002\n\u0000R \u0010\u000e\u001a\b\u0012\u0004\u0012\u00020\u00100\u000fX\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\u0011\u0010\u0012\"\u0004\b\u0013\u0010\u0014¨\u0006&"},
+        d2 = {"Lcom/hepicar/listeneverything/TMT_Medium;", "Landroid/support/v4/app/Fragment;", "()V", "boolA", "", "boolB", "boolC", "boolD", "boolE", "boolF", "boolG", "boolH", "boolI", "boolJ", "tmtData", "", "Lcom/hepicar/listeneverything/model/TMT;", "getTmtData", "()Ljava/util/List;", "setTmtData", "(Ljava/util/List;)V", "TMT", "", "view", "Landroid/view/View;", "TMTAddData", "timestamp", "", "data", "", "onCreateView", "inflater", "Landroid/view/LayoutInflater;", "container", "Landroid/view/ViewGroup;", "savedInstanceState", "Landroid/os/Bundle;", "Companion", "app"}
+)
 
 public class MainActivity extends AppCompatActivity {
     //曲线
@@ -100,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     public static TextView mTV_Heart_Rate20 = null;
     private static TextView mTV_Avg_Pixel_Values = null;
     private static TextView mTV_pulse = null;
-    private static TextView mtvampuh = null;
+    //private static TextView mtvampuh = null;
     private static PowerManager.WakeLock wakeLock = null;
     private static int averageIndex = 0;
     private static final int averageArraySize = 11;
@@ -129,7 +138,12 @@ public class MainActivity extends AppCompatActivity {
     private static double beats = 0;
     //开始时间
     private static long startTime = 0;
+    private static long adTime = 0;
     private static double HR20 = 0;
+    private List hrData = (List)(new ArrayList());
+    public final List getHrData() {
+        return this.hrData;
+    }
 
 
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
@@ -161,9 +175,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+        }
 
 
         initConfig();
+        onButtonClick();
     }
 
     /**
@@ -173,49 +192,25 @@ public class MainActivity extends AppCompatActivity {
     private void initConfig(){
         context = getApplicationContext();
 
-        Button mulai = (Button) findViewById(R.id.mulai);
-        mulai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startTime = System.currentTimeMillis();
-                beats = 0;
-                list.clear();
+        Button finish = (Button) findViewById(R.id.finish);
 
-                //getSupportFragmentManager().beginTransaction()
-                //.add(R.id.id_tmt1), firstFragment).commit();
-                LinearLayout tmt = (LinearLayout) findViewById(R.id.id_tmt1);
-                tmt.setVisibility(View.VISIBLE);
-                mTV_Heart_Rate.setVisibility(View.VISIBLE);
-            }
-        });
-
-        tMT();
         LinearLayout layout = (LinearLayout)findViewById(R.id.id_linearLayout_graph);
-        //LinearLayout layout2 = (LinearLayout)findViewById(R.id.id_linearLayout_graph2);
 
         series = new XYSeries(title);
-//        series2 = new XYSeries(title);
 
         mDataset = new XYMultipleSeriesDataset();
-  //      mDataset2 = new XYMultipleSeriesDataset();
 
         mDataset.addSeries(series);
-    //    mDataset2.addSeries(series2);
 
         int color = Color.GREEN;
         PointStyle style = PointStyle.CIRCLE;
         renderer = buildRenderer(color, style, true);
-      //  renderer2 = buildRenderer(color, style, true);
 
         setChartSettings(renderer, "X", "Y", 0, 1000, 4,16, Color.WHITE, Color.WHITE);
-        //setChartSettings2(renderer2, "X", "Y", 0, 1000, -1,1, Color.WHITE, Color.WHITE);
 
         chart = ChartFactory.getLineChartView(context, mDataset, renderer);
-        //chart2 = ChartFactory.getLineChartView(context, mDataset2, renderer2);
 
         layout.addView(chart, new WindowManager.LayoutParams(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT));
-        //layout2.addView(chart2, new WindowManager.LayoutParams(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT));
-
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -234,26 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
         timer.schedule(task, 1,8);
 
-        /*handler2 = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                updateChart2();
-                super.handleMessage(msg);
-            }
-        };
-        task2 = new TimerTask() {
-            @Override
-            public void run() {
-                Message message2 = new Message();
-                message2.what = 1;
-                handler.sendMessage(message2);
-            }
-        };
-
-        timer2.schedule(task2, 1,8);
-*/
         preview = (SurfaceView) findViewById(R.id.id_preview);
-        previewL = (ConstraintLayout) findViewById(R.id.id_tmt1);
         previewHolder = preview.getHolder();
         previewHolder.addCallback(surfaceCallback);
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -261,13 +237,134 @@ public class MainActivity extends AppCompatActivity {
         mTV_Heart_Rate = (TextView) findViewById(R.id.id_tv_heart_rate);
         mTV_Avg_Pixel_Values = (TextView) findViewById(R.id.id_tv_Avg_Pixel_Values);
         mTV_pulse = (TextView) findViewById(R.id.id_tv_pulse);
-        mtvampuh = (TextView) findViewById(R.id.id_tv_pulsetime);
+        //mtvampuh = (TextView) findViewById(R.id.id_tv_pulsetime);
         mTV_Heart_Rate20 = (TextView) findViewById(R.id.id_tv_heart_rate20);
 
         mTV_Heart_Rate.setVisibility(View.GONE);
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,  "My Tag");
     }
+
+    public void onView(){
+        Button finish = (Button)findViewById(R.id.finish);
+        finish.setVisibility(View.VISIBLE);
+        //Button mulai = (Button)findViewById(R.id.mulai);
+        //mulai.setVisibility(View.VISIBLE);
+    }
+
+    private void onButtonClick(){
+        Button mulai = (Button) findViewById(R.id.mulai);
+        mulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTime = System.currentTimeMillis();
+                beats = 0;
+                list.clear();
+                //Intent tmt = new Intent(MainActivity.this, TMT.class);
+                //startActivity(tmt);
+                TMT();
+                //mTV_Heart_Rate.setVisibility(View.VISIBLE);
+                Button btn = (Button) findViewById(R.id.mulai);
+                btn.setVisibility(View.GONE);
+                mTV_Avg_Pixel_Values.setVisibility(View.GONE);
+                mTV_pulse.setVisibility(View.GONE);
+                mTV_Heart_Rate20.setVisibility(View.GONE);
+            }
+        });
+
+        Button finish = (Button) findViewById(R.id.finish);
+        finish.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mTV_Avg_Pixel_Values.setVisibility(View.VISIBLE);
+                mTV_pulse.setVisibility(View.VISIBLE);
+                mTV_Heart_Rate20.setVisibility(View.VISIBLE);
+                Button btn = (Button) findViewById(R.id.mulai);
+                btn.setVisibility(View.VISIBLE);
+
+                saveToCsv(MainActivity.this.getHrData());
+                MainActivity.this.getHrData().clear();
+            }
+        });
+    }
+
+    public final void saveToCsv(@NotNull List data) {
+        Intrinsics.checkParameterIsNotNull(data, "data");
+        String CSV_HEADER = "TimeStamp,HeartRate";
+        FileWriter fileWriter = (FileWriter)null;
+        String fielName = System.currentTimeMillis() + "_heart_rate.csv";
+        boolean var14 = false;
+
+        label113: {
+            try {
+                var14 = true;
+                File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File file = new File(f, fielName);
+                DriverManager.println("file is exist " + file.exists());
+                fileWriter = new FileWriter(file);
+                fileWriter.append((CharSequence)CSV_HEADER);
+                fileWriter.append('\n');
+                Iterator var8 = data.iterator();
+
+                while(var8.hasNext()) {
+                    HeartRate item = (HeartRate)var8.next();
+                    fileWriter.append((CharSequence)String.valueOf(item.getTimestampString()));
+                    fileWriter.append(',');
+                    //fileWriter.append((CharSequence)String.valueOf(item.getImg_avg()));
+                    //fileWriter.append(',');
+                    fileWriter.append((CharSequence)String.valueOf(item.getImg_avg()));
+                    fileWriter.append('\n');
+                }
+
+                DriverManager.println("Write CSV successfully!");
+                var14 = false;
+                break label113;
+            } catch (Exception var18) {
+                DriverManager.println("Writing CSV error!");
+                var18.printStackTrace();
+                var14 = false;
+            } finally {
+                if (var14) {
+                    try {
+                        if (fileWriter == null) {
+                            Intrinsics.throwNpe();
+                        }
+
+                        fileWriter.flush();
+                        fileWriter.close();
+                    } catch (IOException var15) {
+                        DriverManager.println("Flushing/closing error!");
+                        var15.printStackTrace();
+                    }
+
+                }
+            }
+
+            try {
+                if (fileWriter == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException var16) {
+                DriverManager.println("Flushing/closing error!");
+                var16.printStackTrace();
+            }
+
+            return;
+        }
+
+        try {
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException var17) {
+            DriverManager.println("Flushing/closing error!");
+            var17.printStackTrace();
+        }
+
+    }
+
 
     //	曲线
     @Override
@@ -335,30 +432,6 @@ public class MainActivity extends AppCompatActivity {
         renderer.setShowLegend(false);
     }
 
-    protected void setChartSettings2(XYMultipleSeriesRenderer renderer2, String xTitle, String yTitle,
-                                    double xMin, double xMax, double yMin, double yMax, int axesColor, int labelsColor) {
-        //Untuk render bagan, lihat dokumentasi api.
-        renderer2.setChartTitle(title);
-        renderer2.setXTitle(xTitle);
-        renderer2.setYTitle(yTitle);
-        renderer2.setXAxisMin(xMin);
-        renderer2.setXAxisMax(xMax);
-        renderer2.setYAxisMin(yMin);
-        renderer2.setYAxisMax(yMax);
-        renderer2.setAxesColor(axesColor);
-        renderer2.setLabelsColor(labelsColor);
-        renderer2.setShowGrid(true);
-        renderer2.setGridColor(Color.GREEN);
-        renderer2.setXLabels(20);
-        renderer2.setYLabels(10);
-        renderer2.setXTitle("Time");
-        renderer2.setYTitle("Benar >< Salah");
-        renderer2.setYLabelsAlign(Paint.Align.RIGHT);
-        renderer2.setPointSize((float) 3 );
-        renderer2.setShowLegend(false);
-    }
-
-
     /**
      * Perbarui informasi ikon
      */
@@ -371,9 +444,7 @@ public class MainActivity extends AppCompatActivity {
             flag = 1;
             if(gx < 200){
                 if(hua[20] > 1){
-                    Toast.makeText(MainActivity.this, "Letakkan jari anda di belakang kamera dan tersinari oleh cahaya flash," +
-                            "dan pastikan detak jantung anda sudah terhitung dan akan terlihat pada grafik" +
-                            ", tolong tekan tombol berikut untuk memulai penghitungan", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Letakkan jari anda di belakang kamera", Toast.LENGTH_SHORT).show();
                     hua[20] = 0;
                 }
                 hua[20]++;
@@ -449,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static List<String> list = new ArrayList<String>();
-    private static android.hardware.Camera.PreviewCallback previewCallback = new PreviewCallback() {
+    private android.hardware.Camera.PreviewCallback previewCallback = new PreviewCallback() {
         public void onPreviewFrame(byte[] data, Camera cam) {
             if (data == null) {
                 throw new NullPointerException();
@@ -473,6 +544,16 @@ public class MainActivity extends AppCompatActivity {
                 processing.set(false);
                 return;
             }
+            MainActivity.this.HRAddData(System.currentTimeMillis(), imgAvg);
+
+            //Simpan Data per 10 mili
+            //long edTime = System.currentTimeMillis();
+            //double totalTimeInMilis = (edTime - adTime);
+            //if (totalTimeInMilis == 10){
+            //    MainActivity.this.HRAddData(System.currentTimeMillis(), imgAvg);
+            //    adTime = System.currentTimeMillis();
+            //}
+
             //Hitung rata-rata
             int averageArrayAvg = 0;
             int averageArrayCnt = 0;
@@ -495,12 +576,10 @@ public class MainActivity extends AppCompatActivity {
                     flag = 0;
                     mTV_pulse.setText("The number of pulses is " + String.valueOf(beats));
                     list.add(String.valueOf(totalTimeInSecs));
-
                 }
             } else if (imgAvg > rollingAverage) {
                 newType = TYPE.GREEN;
             }
-
 
             if(averageIndex == averageArraySize) {
                 averageIndex = 0;
@@ -513,7 +592,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Dapatkan waktu akhir sistem (ms)
-
             if(totalTimeInSecs >=1){
                 mTV_Heart_Rate.setText("Timers "+String.valueOf(totalTimeInSecs));
             }
@@ -541,15 +619,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                /*mTV_Heart_Rate.setText("Heart Rate"+String.valueOf(beatsAvg) +
-                        "  value:" + String.valueOf(beatsArray.length) +
-                        "    " + String.valueOf(beatsIndex) +
-                        "    " + String.valueOf(beatsArrayAvg) +
-                        "    " + String.valueOf(beatsArrayCnt));*/
                 if(beatsIndex == beatsArray.length){ HR20 = beatsAvg;}
                 mTV_Heart_Rate20.setText("Your Heart Rate is "+String.valueOf(HR20));
                 beats = 0;
-                mtvampuh.setText("Time pulses " + (list));
+                //mtvampuh.setText("Time pulses " + (list));
                 mTV_Heart_Rate.setVisibility(View.GONE);
                 startTime = 0;
             }
@@ -557,7 +630,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private static SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             try {
@@ -660,156 +733,46 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    /*private boolean boolA = false;
-    private boolean boolB = false;
-    private boolean boolC = false;
-    private boolean boolD = false;
-    private boolean boolE = false;
-    private boolean boolF = false;
-    private boolean boolG = false;
-    private boolean boolH = false;
-    private boolean boolI = false;
-    private boolean boolJ = false;
-
-    private void tMT(){
-
-        Button next =(Button) findViewById(R.id.next);
-        next.setVisibility(View.GONE);
-
-        Button a =(Button) findViewById(R.id.a);
-        a.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button a =(Button) findViewById(R.id.a);
-                a.setBackgroundResource(R.drawable.colorchange);
-                boolA=true;
-            }
-        });
-
-        Button b =(Button) findViewById(R.id.b);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA==true){
-                    Button b =(Button) findViewById(R.id.b);
-                    b.setBackgroundResource(R.drawable.colorchange);
-
-                    boolB=true;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permisions, @NonNull int[] grantResults){
+        switch (requestCode){
+            case 1000:
+                if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Permission not granted!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-            }
-        });
+        }
+    }
 
-        Button c =(Button) findViewById(R.id.c);
-        c.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB){
-                    Button c =(Button) findViewById(R.id.c);
-                    c.setBackgroundResource(R.drawable.colorchange);
+    public final void HRAddData(long timestamp, int data) {
+        HeartRate hr = new HeartRate(timestamp);
+        hr.setImg_avg(data);
+        this.hrData.add(hr);
+    }
 
-                    boolC=true;
-                }
-            }
-        });
+    public final void TMT(){
+        TMT_Medium tmtMediumFragment = new TMT_Medium();
+        FragmentManager manager = this.getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_tmt, (Fragment)tmtMediumFragment);
+        transaction.commit();
+    }
 
-        Button d =(Button) findViewById(R.id.d);
-        d.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC){
-                    Button d =(Button) findViewById(R.id.d);
-                    d.setBackgroundResource(R.drawable.colorchange);
 
-                    boolD=true;
-                }
-            }
-        });
+    public static final class Companion {
+        @NotNull
+        public final MainActivity newInstance() {
+            return new MainActivity();
+        }
 
-        Button e =(Button) findViewById(R.id.e);
-        e.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD){
-                    Button e =(Button) findViewById(R.id.e);
-                    e.setBackgroundResource(R.drawable.colorchange);
+        private Companion() {
+        }
 
-                    boolE=true;
-                }
-            }
-        });
-
-        Button f =(Button) findViewById(R.id.f);
-        f.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD&&boolE){
-                    Button f =(Button) findViewById(R.id.f);
-                    f.setBackgroundResource(R.drawable.colorchange);
-
-                    boolF=true;
-                }
-            }
-        });
-
-        Button g =(Button) findViewById(R.id.g);
-        g.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD&&boolE&&boolF){
-                    Button g =(Button) findViewById(R.id.g);
-                    g.setBackgroundResource(R.drawable.colorchange);
-
-                    boolG=true;
-                }
-            }
-        });
-
-        Button h =(Button) findViewById(R.id.h);
-        h.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD&&boolE&&boolF&&boolG){
-                    Button h =(Button) findViewById(R.id.h);
-                    h.setBackgroundResource(R.drawable.colorchange);
-
-                    boolH=true;
-                }
-            }
-        });
-
-        Button i =(Button) findViewById(R.id.i);
-        i.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD&&boolE&&boolF&&boolG&&boolH){
-                    Button i =(Button) findViewById(R.id.i);
-                    i.setBackgroundResource(R.drawable.colorchange);
-
-                    boolI=true;
-                }
-            }
-        });
-
-        Button j =(Button) findViewById(R.id.j);
-        j.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(boolA&&boolB&&boolC&&boolD&&boolE&&boolF&&boolG&&boolH&&boolI){
-                    Button j =(Button) findViewById(R.id.j);
-                    j.setBackgroundResource(R.drawable.colorchange);
-
-                    boolJ=true;
-                    Button next = (Button)findViewById(R.id.next);
-                    next.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
-            }
-        });
-    }*/
+        // $FF: synthetic method
+        //public Companion(DefaultConstructorMarker $constructor_marker) {
+        //    this();
+        //}
+    }
 }
