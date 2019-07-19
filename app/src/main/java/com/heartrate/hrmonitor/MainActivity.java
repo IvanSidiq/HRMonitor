@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.heartrate.hrmonitor.model.Beats;
 import com.heartrate.hrmonitor.model.HeartRate;
 import com.heartrate.hrmonitor.repository.LocalStorage;
 import org.achartengine.ChartFactory;
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     //心跳数组
     private static final int[] beatsArray = new int[beatsArraySize];
     //心跳脉冲
-    private static double beats = 0;
+    private static int beats = 0;
     //开始时间
     private static long startTime = 0;
     private static long adTime = 0;
@@ -145,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
         return this.hrData;
     }
 
+    private List btData = (List)(new ArrayList());
+    public final List getBtData() {
+        return this.btData;
+    }
 
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String ALLOW_KEY = "ALLOWED";
@@ -260,6 +265,10 @@ public class MainActivity extends AppCompatActivity {
                 startTime = System.currentTimeMillis();
                 beats = 0;
                 list.clear();
+                saveToCsvBeats(MainActivity.this.getBtData());
+                MainActivity.this.getBtData().clear();
+                saveToCsv(MainActivity.this.getHrData());
+                MainActivity.this.getHrData().clear();
                 //Intent tmt = new Intent(MainActivity.this, TMT.class);
                 //startActivity(tmt);
                 TMT();
@@ -282,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
                 Button btn = (Button) findViewById(R.id.mulai);
                 btn.setVisibility(View.VISIBLE);
 
+                saveToCsvBeats(MainActivity.this.getBtData());
+                MainActivity.this.getBtData().clear();
                 saveToCsv(MainActivity.this.getHrData());
                 MainActivity.this.getHrData().clear();
             }
@@ -313,6 +324,81 @@ public class MainActivity extends AppCompatActivity {
                     //fileWriter.append((CharSequence)String.valueOf(item.getImg_avg()));
                     //fileWriter.append(',');
                     fileWriter.append((CharSequence)String.valueOf(item.getImg_avg()));
+                    fileWriter.append('\n');
+                }
+
+                DriverManager.println("Write CSV successfully!");
+                var14 = false;
+                break label113;
+            } catch (Exception var18) {
+                DriverManager.println("Writing CSV error!");
+                var18.printStackTrace();
+                var14 = false;
+            } finally {
+                if (var14) {
+                    try {
+                        if (fileWriter == null) {
+                            Intrinsics.throwNpe();
+                        }
+
+                        fileWriter.flush();
+                        fileWriter.close();
+                    } catch (IOException var15) {
+                        DriverManager.println("Flushing/closing error!");
+                        var15.printStackTrace();
+                    }
+
+                }
+            }
+
+            try {
+                if (fileWriter == null) {
+                    Intrinsics.throwNpe();
+                }
+
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException var16) {
+                DriverManager.println("Flushing/closing error!");
+                var16.printStackTrace();
+            }
+
+            return;
+        }
+
+        try {
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException var17) {
+            DriverManager.println("Flushing/closing error!");
+            var17.printStackTrace();
+        }
+
+    }
+
+    public final void saveToCsvBeats(@NotNull List data) {
+        Intrinsics.checkParameterIsNotNull(data, "data");
+        String CSV_HEADER = "Timestamp,Beats";
+        FileWriter fileWriter = (FileWriter)null;
+        String fielName = System.currentTimeMillis() + "_beats.csv";
+        boolean var14 = false;
+
+        label113: {
+            try {
+                var14 = true;
+                File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                File file = new File(f, fielName);
+                DriverManager.println("file is exist " + file.exists());
+                fileWriter = new FileWriter(file);
+                fileWriter.append((CharSequence)CSV_HEADER);
+                fileWriter.append('\n');
+                Iterator var8 = data.iterator();
+
+                while(var8.hasNext()) {
+                    Beats item = (Beats)var8.next();
+                    fileWriter.append((CharSequence)String.valueOf(item.getTimestampBeats()));
+                    fileWriter.append(',');
+                    fileWriter.append((CharSequence)String.valueOf(item.getBeats()));
                     fileWriter.append('\n');
                 }
 
@@ -576,6 +662,7 @@ public class MainActivity extends AppCompatActivity {
                     flag = 0;
                     mTV_pulse.setText("The number of pulses is " + String.valueOf(beats));
                     list.add(String.valueOf(totalTimeInSecs));
+                    MainActivity.this.BeatsAddData(System.currentTimeMillis(), 1);
                 }
             } else if (imgAvg > rollingAverage) {
                 newType = TYPE.GREEN;
@@ -750,6 +837,11 @@ public class MainActivity extends AppCompatActivity {
         HeartRate hr = new HeartRate(timestamp);
         hr.setImg_avg(data);
         this.hrData.add(hr);
+    }
+    public final void BeatsAddData(long timestamp, int data) {
+        Beats bt = new Beats(timestamp);
+        bt.setBeats(data);
+        this.btData.add(bt);
     }
 
     public final void TMT(){
